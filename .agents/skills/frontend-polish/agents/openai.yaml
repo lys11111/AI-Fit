@@ -1,0 +1,7 @@
+interface:
+  display_name: "Frontend Polish"
+  short_description: "Polish AI-FIT screens with stronger hierarchy and cleaner mobile product UI."
+  default_prompt: "Use $frontend-polish to refine this AI-FIT screen into a cleaner, more polished mobile product experience."
+
+policy:
+  allow_implicit_invocation: true

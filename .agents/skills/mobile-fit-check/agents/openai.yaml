@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mobile Fit Check"
+  short_description: "Catch mobile overflow, tap-target, and first-viewport issues in AI-FIT."
+  default_prompt: "Use $mobile-fit-check to verify this AI-FIT screen on narrow mobile viewports."
+
+policy:
+  allow_implicit_invocation: true

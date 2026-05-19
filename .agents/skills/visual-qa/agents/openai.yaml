@@ -1,0 +1,7 @@
+interface:
+  display_name: "Visual QA"
+  short_description: "Review AI-FIT UI with screenshots, viewport checks, and defect-focused reporting."
+  default_prompt: "Use $visual-qa to inspect this AI-FIT UI change and report any visual defects before signoff."
+
+policy:
+  allow_implicit_invocation: true

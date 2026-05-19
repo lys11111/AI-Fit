@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  font-family:
+    Inter,
+    "SF Pro Display",
+    "PingFang SC",
+    "Microsoft YaHei",
+    system-ui,
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --primitive-neutral-0: #ffffff;
+  --primitive-neutral-25: #fcf9ff;
+  --primitive-neutral-50: #f6f1ff;
+  --primitive-neutral-100: #efe8fb;
+  --primitive-neutral-200: #e2d7f5;
+  --primitive-neutral-300: #c9bbdf;
+  --primitive-neutral-700: #625b74;
+  --primitive-neutral-900: #241d34;
+
+  --primitive-primary-500: #8b6deb;
+  --primitive-primary-600: #6f52cc;
+  --primitive-primary-soft: rgba(139, 109, 235, 0.14);
+  --primitive-primary-line: rgba(139, 109, 235, 0.24);
+
+  --primitive-mint-500: #42a88f;
+  --primitive-mint-soft: rgba(66, 168, 143, 0.14);
+  --primitive-mint-line: rgba(66, 168, 143, 0.22);
+
+  --primitive-amber-500: #c4873d;
+  --primitive-amber-soft: rgba(196, 135, 61, 0.14);
+  --primitive-amber-line: rgba(196, 135, 61, 0.22);
+
+  --primitive-indigo-500: #9a7af0;
+  --primitive-indigo-soft: rgba(154, 122, 240, 0.14);
+  --primitive-indigo-line: rgba(154, 122, 240, 0.24);
+
+  --surface-canvas: var(--primitive-neutral-50);
+  --surface-shell: rgba(249, 244, 255, 0.96);
+  --surface-default: rgba(255, 255, 255, 0.94);
+  --surface-subtle: #f1eaff;
+  --surface-raised: rgba(255, 255, 255, 0.98);
+  --surface-accent-soft: rgba(139, 109, 235, 0.08);
+
+  --surface-glow-top: rgba(139, 109, 235, 0.14);
+  --surface-gradient-start: #faf7ff;
+  --surface-gradient-end: #f0e9ff;
+  --surface-panel-gradient-start: rgba(255, 255, 255, 0.99);
+  --surface-panel-gradient-end: rgba(242, 233, 255, 0.98);
+
+  --text-primary: var(--primitive-neutral-900);
+  --text-secondary: #6a637d;
+  --text-tertiary: #948ca9;
+  --text-inverse: #ffffff;
+  --text-accent: var(--primitive-primary-600);
+
+  --border-subtle: rgba(36, 29, 52, 0.08);
+  --border-strong: rgba(139, 109, 235, 0.18);
+  --border-selected: rgba(139, 109, 235, 0.28);
+  --border-focus: rgba(139, 109, 235, 0.42);
+  --border-shell: rgba(58, 42, 95, 0.08);
+
+  --accent-primary-solid: var(--primitive-primary-500);
+  --accent-primary-soft: var(--primitive-primary-soft);
+  --accent-primary-line: var(--primitive-primary-line);
+  --accent-primary-ink: var(--primitive-primary-600);
+
+  --accent-mint-solid: var(--primitive-mint-500);
+  --accent-mint-soft: var(--primitive-mint-soft);
+  --accent-mint-line: var(--primitive-mint-line);
+  --accent-mint-ink: #2f7f6c;
+
+  --accent-amber-solid: var(--primitive-amber-500);
+  --accent-amber-soft: var(--primitive-amber-soft);
+  --accent-amber-line: var(--primitive-amber-line);
+  --accent-amber-ink: #9b6124;
+
+  --accent-indigo-solid: var(--primitive-indigo-500);
+  --accent-indigo-soft: var(--primitive-indigo-soft);
+  --accent-indigo-line: var(--primitive-indigo-line);
+  --accent-indigo-ink: #7a5ad9;
+
+  --state-hover: rgba(36, 29, 52, 0.03);
+  --state-pressed: rgba(36, 29, 52, 0.06);
+  --state-selected: rgba(139, 109, 235, 0.12);
+  --state-disabled: rgba(63, 51, 90, 0.34);
+
+  --ring: var(--border-focus);
+
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  --radius-shell: 32px;
+  --radius-hero: 24px;
+  --radius-section: 20px;
+  --radius-row: 16px;
+  --radius-pill: 999px;
+
+  --shadow-none: none;
+  --shadow-subtle: 0 20px 40px -32px rgba(72, 56, 120, 0.18);
+  --shadow-raised: 0 24px 42px -30px rgba(111, 82, 204, 0.24);
+  --shadow-shell: 0 40px 80px -44px rgba(66, 50, 107, 0.28);
+
+  --motion-duration-fast: 160ms;
+  --motion-duration-standard: 220ms;
+  --motion-duration-entrance: 280ms;
+  --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top, var(--surface-glow-top), transparent 24rem),
+      linear-gradient(180deg, var(--surface-gradient-start) 0%, var(--surface-gradient-end) 100%);
+    color: var(--text-primary);
+  }
+
+  body,
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}

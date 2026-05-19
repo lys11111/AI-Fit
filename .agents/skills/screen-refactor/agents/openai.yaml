@@ -1,0 +1,7 @@
+interface:
+  display_name: "Screen Refactor"
+  short_description: "Break monolithic routes into reusable AI-FIT screens and app components."
+  default_prompt: "Use $screen-refactor to split this route into cleaner screens, app components, and reusable UI primitives."
+
+policy:
+  allow_implicit_invocation: true
