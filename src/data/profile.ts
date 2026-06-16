@@ -12,7 +12,7 @@ export const settingsSections = [
 export const helpTopics = [
   {
     title: '为什么训练计划会调整？',
-    copy: '原型会根据你最近一次训练反馈、疲劳状态和器械可用性给出轻量调整建议。',
+    copy: '系统会根据你最近一次训练反馈、疲劳状态和器械可用性给出轻量调整建议。',
   },
   {
     title: '饮食识别结果可以改吗？',
@@ -25,7 +25,7 @@ export const helpTopics = [
 ]
 
 export const aboutStats = [
-  { label: '原型版本', value: 'v0.3', hint: '完整交互演示版' },
+  { label: '产品版本', value: 'v0.3', hint: 'AI-FIT 体验版' },
   { label: '核心能力', value: '训练 · 饮食 · 社区', hint: '围绕日常健身闭环' },
-  { label: '当前形态', value: '前端原型', hint: '保留接口，未接真实网络' },
+  { label: '核心体验', value: 'AI 训练助手', hint: '计划、识别、纠偏与记录' },
 ]

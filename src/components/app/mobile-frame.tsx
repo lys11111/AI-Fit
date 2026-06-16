@@ -1,13 +1,14 @@
-import { Apple, Dumbbell, Home, User } from 'lucide-react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Apple, Dumbbell, MessagesSquare, User } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { NavLink, useLocation, useOutlet } from 'react-router-dom'
 
 import { routes, tabRoutes } from '@/app/routes'
 import { bottomNavStyles, textRoleClasses } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
 const tabs = [
-  { to: routes.app.home, label: '首页', icon: Home },
   { to: routes.app.training, label: '训练', icon: Dumbbell },
+  { to: routes.app.community, label: '论坛', icon: MessagesSquare },
   { to: routes.app.nutrition, label: '饮食', icon: Apple },
   { to: routes.app.profile, label: '我的', icon: User },
 ]
@@ -16,6 +17,7 @@ const tabPaths = new Set(tabRoutes)
 
 export function MobileFrame() {
   const location = useLocation()
+  const outlet = useOutlet()
   const showTabs = tabPaths.has(location.pathname as (typeof tabRoutes)[number])
 
   return (
@@ -25,8 +27,19 @@ export function MobileFrame() {
           <span>09:41</span>
           <span>AI-FIT</span>
         </div>
-        <main className={cn('flex-1 overflow-y-auto px-4 pt-1', showTabs ? 'pb-28' : 'pb-6')}>
-          <Outlet />
+        <main className={cn('relative flex-1 overflow-y-auto px-4 pt-1', showTabs ? 'pb-28' : 'pb-6')}>
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={location.pathname}
+              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+              className="min-h-full"
+              exit={{ opacity: 0, x: -18, filter: 'blur(3px)' }}
+              initial={{ opacity: 0, x: 24, filter: 'blur(3px)' }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {outlet}
+            </motion.div>
+          </AnimatePresence>
         </main>
         {showTabs ? (
           <nav aria-label="底部导航" className={cn('sticky bottom-0 grid grid-cols-4 gap-2 px-3 pb-4 pt-3', bottomNavStyles)}>

@@ -20,7 +20,7 @@ export function InviteFriendsScreen() {
       <PageHeader
         backTo={routes.app.profileSupport}
         title="推荐给好友"
-        description="这里仍然是演示态，但也应该有完成感：你能看到收件人、渠道和最近一次发出的状态。"
+        description="填写好友昵称和发送渠道，最近一次发送状态会保留在页面里。"
         variant="compact"
       />
 
@@ -48,7 +48,7 @@ export function InviteFriendsScreen() {
           className="w-full"
           onClick={() => actions.sendInvite({ recipient, channel })}
         >
-          发送演示邀请
+          发送邀请
         </Button>
       </GroupedSection>
     </Screen>

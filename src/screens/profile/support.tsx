@@ -14,23 +14,23 @@ export function ProfileSupportScreen() {
       />
 
       <GroupedSection className="space-y-3">
-        <InteractiveRow helperText="常见问题、识别说明和原型使用范围。" icon={CircleHelp} title="帮助中心" to={routes.app.help} />
+        <InteractiveRow helperText="常见问题、器械识别说明和训练计划使用建议。" icon={CircleHelp} title="帮助中心" to={routes.app.help} />
         <InteractiveRow
-          helperText="当前原型版本、核心能力和阶段说明。"
+          helperText="了解 AI-FIT 的核心能力和产品信息。"
           icon={Info}
           title="关于我们"
           tone="indigo"
           to={routes.app.about}
         />
         <InteractiveRow
-          helperText="把这轮体验里的卡点写回来，原型也应该能承接。"
+          helperText="告诉我们你在训练、识别或记录中遇到的问题。"
           icon={MessageSquareText}
           title="反馈问题"
           tone="amber"
           to={routes.app.supportFeedback}
         />
         <InteractiveRow
-          helperText="演示邀请动作、分享渠道和完成状态。"
+          helperText="把 AI-FIT 推荐给一起训练的朋友。"
           icon={Share2}
           title="推荐给好友"
           tone="mint"

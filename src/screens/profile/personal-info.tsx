@@ -18,7 +18,7 @@ export function PersonalInfoScreen() {
       <PageHeader
         backTo={routes.app.profileAccount}
         title="个人资料"
-        description="这里是真实可编辑的原型表单，保存后会直接写回本地状态。"
+        description="完善昵称、城市和个人简介，让训练计划和社区推荐更贴合你。"
         variant="compact"
       />
 
@@ -35,7 +35,7 @@ export function PersonalInfoScreen() {
           <span className="text-[14px] font-medium text-[var(--text-primary)]">简介</span>
           <Textarea id="personal-info-bio" onChange={(event) => setForm((current) => ({ ...current, bio: event.target.value }))} value={form.bio} />
         </label>
-        {saved ? <Badge variant="mint" className="w-fit">资料已经保存到本地原型状态</Badge> : null}
+        {saved ? <Badge variant="mint" className="w-fit">资料已保存</Badge> : null}
         <Button
           className="w-full"
           data-testid="save-personal-info"

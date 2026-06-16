@@ -12,7 +12,7 @@ export function NotificationsScreen() {
   return (
     <Screen dataScreen="notifications">
       <PageHeader
-        backTo={routes.app.home}
+        backTo={routes.app.training}
         description="这里不是简单堆消息，而是把下一步要不要行动讲清楚。"
         title="通知中心"
         variant="secondary"
@@ -26,7 +26,7 @@ export function NotificationsScreen() {
           清空通知
         </Button>
         <Button data-testid="notifications-restore" onClick={actions.restoreNotifications} variant="ghost">
-          恢复演示数据
+          恢复默认通知
         </Button>
       </div>
 
@@ -65,7 +65,7 @@ export function NotificationsScreen() {
       ) : (
         <GroupedSection className="space-y-2" variant="inset">
           <p className="text-[16px] leading-[22px] font-semibold text-[var(--text-primary)]">现在是空收件箱</p>
-          <p className="text-[14px] leading-[21px] text-[var(--text-secondary)]">这轮演示通知已经处理完了，需要继续演示时可以恢复默认数据。</p>
+          <p className="text-[14px] leading-[21px] text-[var(--text-secondary)]">当前通知已经处理完了，需要继续查看时可以恢复默认通知。</p>
         </GroupedSection>
       )}
     </Screen>
