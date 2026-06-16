@@ -42,7 +42,7 @@ export const todayPlan = {
 } as const
 
 export const completionStats = [
-  { label: '完成动作', value: '3', hint: '今日计划动作数' },
+  { label: '完成动作', value: '3', hint: '动作闭环已完成' },
   { label: '训练组数', value: '9', hint: '和计划保持一致' },
   { label: '训练时长', value: '45 分钟', hint: '落在目标区间内' },
 ] as const

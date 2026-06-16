@@ -171,16 +171,16 @@ export function PageHeader({
   const handleBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (backTo) {
-      navigate(backTo)
-      return
-    }
-
     const historyIndex =
       typeof window !== 'undefined' && typeof window.history.state?.idx === 'number' ? window.history.state.idx : 0
 
     if (historyIndex > 0) {
       navigate(-1)
+      return
+    }
+
+    if (backTo) {
+      navigate(backTo)
     }
   }
 

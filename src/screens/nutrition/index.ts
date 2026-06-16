@@ -1,5 +1,3 @@
 export { MealCaptureScreen } from './meal-capture'
 export { MealConfirmScreen } from './meal-confirm'
-export { NutritionChatScreen } from './nutrition-chat'
-export { NutritionRecommendScreen } from './nutrition-recommend'
 export { NutritionScreen } from './nutrition'

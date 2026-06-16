@@ -9,7 +9,7 @@ export function AboutScreen() {
       <PageHeader
         backTo={routes.app.profileSupport}
         title="关于 AI-FIT"
-        description="AI-FIT 专注于固定器械识别、训练计划生成、动作纠偏和训练饮食记录。"
+        description="这页负责把原型现在是什么、还不是什么讲清楚，避免测试时把展示页误读成已经完成的智能能力。"
         variant="compact"
       />
 
@@ -27,16 +27,16 @@ export function AboutScreen() {
       </div>
 
       <GroupedSection className="space-y-4" variant="inset">
-        <SectionHeader kicker="PRODUCT" title="AI-FIT 能为你做什么" tone="muted" />
+        <SectionHeader kicker="CURRENT SCOPE" title="当前阶段怎么理解这套原型" tone="muted" />
         <div className="grid gap-2.5">
-          <InsetRow title="固定器械训练更容易开始" copy="计划会优先匹配推胸、下拉、划船、腿举等常见器械动作。" />
-          <InsetRow title="动作纠偏降低训练风险" copy="摄像头训练页会帮助你关注姿态、节奏和完成次数。" />
-          <InsetRow title="训练饮食一起管理" copy="训练计划、饮食记录和身体数据会放在同一套日常流程里。" />
+          <InsetRow title="训练主线和饮食副线优先做真" copy="这一轮重点是确认哪些闭环已经能反复测试，而不是继续堆页面数量。" />
+          <InsetRow title="入口链路负责把故事讲顺" copy="登录、问卷、计划预览现在的任务，是让后面的训练主线显得可信。 " />
+          <InsetRow title="社区和相机页先解释能力边界" copy="如果它们还没有深写状态，就明确告诉测试者它们目前只是展示页或辅助工具页。" />
         </div>
       </GroupedSection>
 
       <div className="grid gap-3">
-        <SectionHeader kicker="FEATURES" title="功能模块" />
+        <SectionHeader kicker="ROUTE AUDIT" title="当前路由分层" />
         {prototypeRouteAudit.map((item, index) => (
           <GroupedSection key={item.title} className="space-y-3">
             <Badge variant={index === 0 ? 'mint' : index === 1 ? 'indigo' : 'amber'}>{item.badge}</Badge>

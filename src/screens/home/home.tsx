@@ -6,7 +6,7 @@ import { NotificationBell } from '@/components/app/notification-bell'
 import { ActionTile, GroupedSection, HeroPanel, InsetRow, MessageBubble, MetricCard, Screen, SectionHeader } from '@/components/app/primitives'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { completionStats, recognizedMeal } from '@/data'
+import { completionStats, recognizedMeal, todayPlan } from '@/data'
 import { textRoleClasses } from '@/lib/design-system'
 import { formatClock } from '@/lib/utils'
 import { usePrototypeState } from '@/prototype/state'
@@ -47,8 +47,8 @@ export function HomeScreen() {
     <Screen dataScreen="home">
       <div className="flex items-start justify-between gap-4 pt-2">
         <div className="space-y-1.5">
-          <p className={textRoleClasses.meta}>{state.onboardingProfile.preferredWindow} · {state.onboardingProfile.trainingPlace}</p>
-          <h1 className={textRoleClasses.pageTitlePrimary}>今天的计划已经准备好。</h1>
+          <p className={textRoleClasses.meta}>{state.onboardingProfile.preferredWindow}更适合把主线收紧一点</p>
+          <h1 className={textRoleClasses.pageTitlePrimary}>晚安，先把这节 {state.onboardingProfile.sessionDuration} 的训练练漂亮。</h1>
         </div>
         <NotificationBell />
       </div>
@@ -59,13 +59,13 @@ export function HomeScreen() {
         title={state.plan.title}
         visual={
           <div className="grid gap-2.5">
-            {state.plan.exercises.map((exercise, index) => (
+            {todayPlan.exercises.map((exercise, index) => (
               <InsetRow
                 copy={`${exercise.sets} 组 · ${exercise.reps}`}
                 key={exercise.name}
                 title={exercise.name}
                 tone="mint"
-                trailing={<Badge variant="mint">{index === 0 ? state.plan.focusPreference : exercise.machineClass}</Badge>}
+                trailing={<Badge variant="mint">{index === 0 ? state.plan.focusPreference : exercise.focus}</Badge>}
               />
             ))}
           </div>
@@ -91,9 +91,9 @@ export function HomeScreen() {
 
       <div className="grid gap-3">
         <SectionHeader kicker="TODAY FLOW" title="今天先做这些" />
-        <ActionTile helperText="进入动作清单、实时纠正和组后反馈。" icon={Dumbbell} meta="今日训练" title="开始今日训练" to={routes.app.training} variant="emphasized" />
+        <ActionTile helperText="进入动作清单、实时纠正和组后反馈，跑完整条训练主线。" icon={Dumbbell} meta="训练主线" title="开始今日训练" to={routes.app.training} variant="emphasized" />
         <ActionTile helperText="看看今天的碳水和蛋白还差多少，再决定是否补一餐。" icon={Utensils} meta="饮食副线" title="去看饮食记录" to={routes.app.nutrition} tone="amber" />
-        <ActionTile helperText="寻找训练时间和目标相近的搭子。" icon={MessageCircleHeart} meta="社区" title="看看社区和训练搭子" to={routes.app.community} tone="indigo" />
+        <ActionTile helperText="社区现在是展示页，用来说明轻社交方向，不会打断训练主线。" icon={MessageCircleHeart} meta="展示页" title="看看社区和训练搭子" to={routes.app.community} tone="indigo" />
       </div>
 
       <GroupedSection className="space-y-3" variant="inset">

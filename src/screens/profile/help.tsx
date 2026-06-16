@@ -9,12 +9,12 @@ export function HelpCenterScreen() {
       <PageHeader
         backTo={routes.app.profileSupport}
         title="帮助中心"
-        description="快速了解 AI-FIT 的训练计划、器械识别、饮食记录和账户功能。"
+        description="这里不只放 FAQ，也负责把当前原型哪些地方已经能走通、哪些地方还是展示态说清楚。"
         variant="compact"
       />
 
       <GroupedSection className="space-y-4" variant="inset">
-        <SectionHeader kicker="QUICK START" title="第一次使用建议" tone="muted" />
+        <SectionHeader kicker="TEST SCRIPT" title="建议这样跑一遍原型" tone="muted" />
         <div className="grid gap-2.5">
           {prototypeWalkthroughSteps.map((step, index) => (
             <InsetRow key={step} meta={`STEP ${index + 1}`} title={step} />
