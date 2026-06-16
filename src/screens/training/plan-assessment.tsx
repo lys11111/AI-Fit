@@ -21,7 +21,7 @@ export function PlanAssessmentScreen() {
       />
 
       <Badge className="w-fit" variant="mint">
-        真闭环 · 第 5 步 / 5 步
+        计划调整 · 第 5 步 / 5 步
       </Badge>
 
       {feedback ? (
@@ -30,6 +30,14 @@ export function PlanAssessmentScreen() {
           <p className="text-[14px] leading-[21px] text-[var(--text-secondary)]">
             本次建议会同时参考你的主线关注点 {state.plan.focusPreference}，以及刚才补充的 {feedback.tag} · {feedback.stability}。
           </p>
+        </GroupedSection>
+      ) : null}
+
+      {feedback?.modelAdvice ? (
+        <GroupedSection className="space-y-2" variant="inset">
+          <p className="text-[11px] leading-[16px] font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">LOCAL MODEL</p>
+          <h2 className="text-[18px] leading-[24px] font-semibold text-[var(--text-primary)]">{feedback.modelAdvice.nextCue}</h2>
+          <p className="text-[14px] leading-[21px] text-[var(--text-secondary)]">{feedback.modelAdvice.adjustment}</p>
         </GroupedSection>
       ) : null}
 
@@ -52,7 +60,7 @@ export function PlanAssessmentScreen() {
       </div>
 
       <Button asChild className="w-full">
-        <Link to={routes.app.home}>回到首页继续使用</Link>
+        <Link to={routes.app.training}>回到训练继续使用</Link>
       </Button>
     </Screen>
   )

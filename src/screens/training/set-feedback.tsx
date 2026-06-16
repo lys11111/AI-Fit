@@ -36,7 +36,7 @@ export function SetFeedbackScreen() {
       />
 
       <Badge className="w-fit" variant="mint">
-        真闭环 · 第 3 步 / 5 步
+        训练反馈 · 第 3 步 / 5 步
       </Badge>
 
       <GroupedSection className="space-y-4">

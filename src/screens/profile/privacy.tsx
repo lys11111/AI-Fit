@@ -16,7 +16,7 @@ export function PrivacyScreen() {
     <Screen dataScreen="privacy">
       <PageHeader
         backTo={routes.app.profileAccount}
-        description="这页主要演示设置保存和跨页持久化。"
+        description="管理相机、通知和健康资料权限，保存后会在本地保留。"
         title="隐私与权限"
         variant="compact"
       />

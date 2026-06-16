@@ -18,12 +18,12 @@ export function WorkoutSummaryScreen() {
       <PageHeader
         backTo={routes.app.live}
         title="训练总结"
-        description="这一页开始把刚才的反馈真正写回训练闭环：先告诉你今天练得怎么样，再把下一次该怎么调讲清楚。"
+        description="回顾本次训练表现，查看完成情况、动作质量和下一次训练建议。"
         variant="compact"
       />
 
       <Badge className="w-fit" variant="mint">
-        真闭环 · 第 4 步 / 5 步
+        今日总结 · 第 4 步 / 5 步
       </Badge>
 
       {feedback ? (

@@ -14,7 +14,7 @@ export function SupportFeedbackScreen() {
 
   return (
     <Screen dataScreen="support-feedback">
-      <PageHeader backTo={routes.app.profileSupport} title="反馈问题" description="这页要明确告诉用户：输入被接住了，不是扔进黑洞。" variant="compact" />
+      <PageHeader backTo={routes.app.profileSupport} title="反馈问题" description="告诉我们你在训练计划、动作识别或饮食记录里遇到的问题。" variant="compact" />
 
       <GroupedSection className="space-y-4">
         <label className="space-y-2">
@@ -27,7 +27,7 @@ export function SupportFeedbackScreen() {
           </Badge>
         ) : null}
         <Button className="w-full" onClick={() => actions.submitSupportFeedback(message)}>
-          提交原型反馈
+          提交反馈
         </Button>
       </GroupedSection>
     </Screen>

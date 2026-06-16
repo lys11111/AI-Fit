@@ -1,101 +1,119 @@
-import { Bell, CircleHelp, ShieldCheck, SlidersHorizontal, UserRound } from 'lucide-react'
+import { Activity, BookOpen, ChevronRight, CircleHelp, Info, LogOut, Pencil, Share2, Sparkles, TrendingUp, Users } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import { routes } from '@/app/routes'
-import { NotificationBell } from '@/components/app/notification-bell'
-import { GroupedSection, InteractiveRow, MetricCard, PageHeader, Screen, SectionHeader } from '@/components/app/primitives'
-import { profileHighlights } from '@/data'
+import { GroupedSection, InteractiveRow, Screen } from '@/components/app/primitives'
+import { Button } from '@/components/ui/button'
 import { usePrototypeState } from '@/prototype/state'
 
 export function ProfileScreen() {
   const { state } = usePrototypeState()
-  const [planHighlight, bodyHighlight, nutritionHighlight] = profileHighlights
+  const profile = state.profileSettings.personalInfo
 
   return (
     <Screen dataScreen="profile">
-      <PageHeader
-        actions={<NotificationBell />}
-        description="把账户、进度和支持入口收在同一页里，用户点哪里都应该有明确去处。"
-        eyebrow="Profile"
-        title="我的"
-        variant="secondary"
-      />
-
-      <div className="grid gap-3">
-        <MetricCard hint={planHighlight.copy} label={planHighlight.title} tone="indigo" value={planHighlight.value} variant="feature" />
-        <MetricCard hint={bodyHighlight.copy} label={bodyHighlight.title} tone="mint" value={bodyHighlight.value} variant="inline" />
-        <MetricCard hint={nutritionHighlight.copy} label={nutritionHighlight.title} tone="amber" value={nutritionHighlight.value} variant="inline" />
+      <div className="grid grid-cols-[44px_1fr_44px] items-center pt-2">
+        <div aria-hidden="true" className="size-11" />
+        <h1 className="text-center text-[32px] leading-[38px] font-semibold text-[var(--accent-primary-ink)]">我的</h1>
+        <div aria-hidden="true" className="size-11" />
       </div>
 
-      <GroupedSection className="space-y-4 border-[var(--border-strong)]">
-        <SectionHeader kicker="STATUS" title="当前状态" />
-        <div className="grid gap-2.5">
-          <InteractiveRow
-            helperText="相机、通知和健康资料都能单独控制。"
-            icon={ShieldCheck}
-            title="隐私与权限"
-            to={routes.app.privacy}
-          />
-          <InteractiveRow
-            description={`当前为 ${state.profileSettings.trainingPreferences.preferredWindow} · ${state.profileSettings.trainingPreferences.sessionDuration}`}
-            icon={SlidersHorizontal}
-            title="训练偏好"
-            tone="mint"
-            to={routes.app.trainingPreferences}
-          />
+      <section className="-mx-4 mt-4 space-y-6 bg-[linear-gradient(180deg,#f1e9ff_0%,#faf7ff_72%)] px-4 pb-5 pt-10">
+        <div className="flex flex-col items-center text-center">
+          <div className="relative">
+            <div className="size-32 overflow-hidden rounded-full border-[6px] border-white bg-[var(--accent-primary-soft)] shadow-[var(--shadow-raised)]">
+              <img alt="" className="h-full w-full object-cover object-center" src="/figma/profile-avatar.png" />
+            </div>
+            <Link
+              aria-label="编辑个人资料"
+              className="absolute -bottom-1 right-0 flex size-12 items-center justify-center rounded-full border-[4px] border-white bg-[var(--accent-primary-solid)] text-white shadow-[var(--shadow-raised)]"
+              to={routes.app.personalInfo}
+            >
+              <Pencil className="size-5" />
+            </Link>
+          </div>
+          <h2 className="mt-6 text-[28px] leading-[34px] font-semibold text-[var(--text-primary)]">{profile.name}</h2>
+          <p className="mt-2 text-[17px] leading-[24px] font-medium text-[var(--text-secondary)]">{profile.bio}</p>
         </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <GroupedSection className="rounded-[24px] bg-white p-5">
+            <p className="text-[38px] leading-[42px] font-semibold text-[var(--accent-primary-ink)]">24</p>
+            <p className="text-[16px] font-semibold text-[var(--text-secondary)]">坚持天数</p>
+          </GroupedSection>
+          <GroupedSection className="rounded-[24px] border-[var(--accent-primary-line)] bg-[#eadbff] p-5">
+            <Sparkles className="size-8 text-[var(--accent-primary-ink)]" />
+            <p className="mt-6 text-[16px] leading-[22px] font-semibold text-[var(--accent-primary-ink)]">等级：资深营养师</p>
+          </GroupedSection>
+        </div>
+      </section>
+
+      <div className="grid gap-4">
+        <Link to={routes.app.tdeeDashboard}>
+          <GroupedSection className="flex items-center gap-4 rounded-[24px] bg-white p-5">
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-[18px] bg-[var(--accent-primary-soft)] text-[var(--accent-primary-ink)]">
+              <TrendingUp className="size-8" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[26px] leading-[31px] font-semibold text-[var(--text-primary)]">数据追踪</h2>
+              <p className="mt-1 text-[16px] leading-[23px] font-medium text-[var(--text-secondary)]">实时查看身体代谢与营养数据</p>
+            </div>
+            <ChevronRight className="size-6 text-[var(--text-tertiary)]" />
+          </GroupedSection>
+        </Link>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Link to={routes.app.buddyMatch}>
+            <GroupedSection className="min-h-[170px] rounded-[24px] bg-white p-5">
+              <div className="flex size-14 items-center justify-center rounded-[16px] bg-[var(--accent-mint-soft)] text-[var(--accent-mint-ink)]">
+                <Users className="size-7" />
+              </div>
+              <h2 className="mt-8 text-[24px] leading-[30px] font-semibold text-[var(--text-primary)]">寻找搭子</h2>
+              <p className="mt-2 text-[14px] leading-[21px] text-[var(--text-secondary)]">寻找志同道合健康伙伴</p>
+            </GroupedSection>
+          </Link>
+
+          <Link to={routes.app.profileAccount}>
+            <GroupedSection className="min-h-[170px] rounded-[24px] bg-white p-5">
+              <div className="flex size-14 items-center justify-center rounded-[16px] bg-[var(--accent-primary-soft)] text-[var(--accent-primary-ink)]">
+                <BookOpen className="size-7" />
+              </div>
+              <h2 className="mt-8 text-[24px] leading-[30px] font-semibold text-[var(--text-primary)]">知识详情</h2>
+              <p className="mt-2 text-[14px] leading-[21px] text-[var(--text-secondary)]">深度了解食品科学营养</p>
+            </GroupedSection>
+          </Link>
+        </div>
+      </div>
+
+      <GroupedSection className="overflow-hidden rounded-[24px] bg-white p-0">
+        <InteractiveRow className="rounded-none shadow-none" icon={CircleHelp} title="帮助中心" to={routes.app.help} trailing={<ChevronRight className="size-6 text-[var(--text-tertiary)]" />} />
+        <div className="h-px bg-[var(--border-subtle)]" />
+        <InteractiveRow className="rounded-none shadow-none" icon={Info} title="关于我们" to={routes.app.about} trailing={<ChevronRight className="size-6 text-[var(--text-tertiary)]" />} />
+        <div className="h-px bg-[var(--border-subtle)]" />
+        <InteractiveRow className="rounded-none shadow-none" icon={Share2} title="推荐给好友" to={routes.app.invite} trailing={<ChevronRight className="size-6 text-[var(--text-tertiary)]" />} />
       </GroupedSection>
 
-      <div className="grid gap-3">
-        <GroupedSection className="space-y-4">
-          <SectionHeader actionLabel="查看全部" actionTo={routes.app.profileAccount} kicker="ACCOUNT" title="账户与资料" />
-          <div className="grid gap-2.5">
-            <InteractiveRow
-              helperText="统一进入个人资料、训练偏好、隐私与通知设置。"
-              icon={UserRound}
-              title="账户中心"
-              to={routes.app.profileAccount}
-            />
-            <InteractiveRow
-              helperText="编辑名字、城市和简介，并持久保留。"
-              icon={UserRound}
-              title="个人资料"
-              to={routes.app.personalInfo}
-            />
-            <InteractiveRow
-              helperText="调整教练提醒、饮食提醒和免打扰时段。"
-              icon={Bell}
-              title="通知设置"
-              tone="amber"
-              to={routes.app.notificationSettings}
-            />
-          </div>
-        </GroupedSection>
+      <GroupedSection className="space-y-3 rounded-[24px] bg-white">
+        <InteractiveRow
+          description={`${state.bodyData.heightCm} cm · ${state.bodyData.weightKg} kg · 体脂 ${state.bodyData.bodyFatPercent}%`}
+          icon={Activity}
+          title="体型数据"
+          tone="amber"
+          to={routes.app.bodyData}
+        />
+        <InteractiveRow
+          description={`当前为 ${state.profileSettings.trainingPreferences.preferredWindow} · ${state.profileSettings.trainingPreferences.sessionDuration}`}
+          icon={TrendingUp}
+          title="训练偏好"
+          tone="mint"
+          to={routes.app.trainingPreferences}
+        />
+      </GroupedSection>
 
-        <GroupedSection className="space-y-4">
-          <SectionHeader actionLabel="查看全部" actionTo={routes.app.profileSupport} kicker="SUPPORT" title="帮助与服务" />
-          <div className="grid gap-2.5">
-            <InteractiveRow
-              helperText="帮助、关于、反馈和邀请都从这里展开。"
-              icon={CircleHelp}
-              title="支持中心"
-              to={routes.app.profileSupport}
-            />
-            <InteractiveRow
-              helperText="查看常见问题、识别说明和原型范围。"
-              icon={CircleHelp}
-              title="帮助中心"
-              to={routes.app.help}
-            />
-            <InteractiveRow
-              helperText="把这轮体验里的卡点写回来。"
-              icon={CircleHelp}
-              title="反馈问题"
-              tone="mint"
-              to={routes.app.supportFeedback}
-            />
-          </div>
-        </GroupedSection>
-      </div>
+      <Button className="min-h-[64px] w-full rounded-[24px] bg-[#fff2f6] text-[20px] text-[#d42832] shadow-none hover:bg-[#ffe7ee]" type="button" variant="ghost">
+        <LogOut className="size-5" />
+        退出登录
+      </Button>
     </Screen>
   )
 }

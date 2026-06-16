@@ -1,8 +1,10 @@
-import { ArrowDownToLine, ScanLine, Sparkles } from 'lucide-react'
+import { ArrowDownToLine, ListChecks, ScanLine, Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import { routes } from '@/app/routes'
 import { GroupedSection, InsetRow, PageHeader, Screen, SectionHeader } from '@/components/app/primitives'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { exerciseLearningCards } from '@/data'
 import { usePrototypeState } from '@/prototype/state'
 
@@ -14,12 +16,12 @@ export function ExerciseLearningScreen() {
       <PageHeader
         backTo={routes.app.training}
         title="动作学习"
-        description="这一页先承担说明作用：把技术要点讲清楚，帮助你带着同一条主线回到训练 Session，而不是伪装成完整课程。"
+        description="把动作要点、常见错误和训练提示放在一起，训练前快速确认发力重点。"
         variant="compact"
       />
 
       <Badge className="w-fit" variant="amber">
-        展示说明页 · 服务训练主线
+        训练前快速学习
       </Badge>
 
       <GroupedSection className="space-y-4">
@@ -36,6 +38,21 @@ export function ExerciseLearningScreen() {
           ))}
         </div>
       </GroupedSection>
+
+      <div className="grid gap-3">
+        <Button asChild className="w-full">
+          <Link to={routes.app.exerciseDetailLat}>
+            查看高位下拉动作详情
+          </Link>
+        </Button>
+      </div>
+
+      <Button asChild className="w-full" variant="secondary">
+        <Link to={routes.app.supportedActions}>
+          <ListChecks className="size-4" />
+          查看支持动作列表
+        </Link>
+      </Button>
     </Screen>
   )
 }
