@@ -15,12 +15,12 @@ export function BuddyMatchScreen() {
       <PageHeader
         backTo={routes.app.community}
         title="训练搭子匹配"
-        description="系统会结合训练目标、时间段和打卡稳定度，推荐更容易坚持下去的训练搭子。"
+        description="这是一张展示页，用来说明未来会按什么理由推荐训练搭子，而不是现在就建立深层社交状态。"
         variant="compact"
       />
 
       <Badge className="w-fit" variant="indigo">
-        搭子匹配 · 高相似度
+        展示页 · 解释匹配逻辑
       </Badge>
 
       <GroupedSection className="space-y-4 border-[var(--border-strong)] bg-[var(--surface-raised)]">

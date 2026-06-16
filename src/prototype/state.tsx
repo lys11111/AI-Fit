@@ -11,7 +11,6 @@ import {
   type MealRecord,
   type NotificationItem,
 } from '@/data'
-import { aiFitApi, type BackendMealAnalysis } from '@/lib/api'
 import { buildGeneratedPlan, type GeneratedPlan, type PlanInput } from '@/prototype/plan'
 
 const storageKey = 'aifit-prototype-state-v1'
@@ -31,19 +30,11 @@ type StoredNotification = NotificationItem & {
 type OnboardingProfileState = {
   sections: { kicker: string; title: string; answers: string[] }[]
   goal: string
-  trainingPlace: string
   weeklyFrequency: string
   preferredWindow: string
   sessionDuration: string
   equipmentPreference: string
   focusPreference: string
-  experienceLevel: string
-  pushupLevel: string
-  squatLevel: string
-  plankLevel: string
-  recoveryLevel: string
-  bodyStatus: string
-  featurePreference: string
   lastCompletedAt: string | null
 }
 
@@ -87,7 +78,6 @@ type NutritionState = {
   mealRecords: MealRecord[]
   recognitionSaved: boolean
   lastSavedMealAt: string | null
-  aiRecommendation: string | null
 }
 
 type TrainingFeedbackState = {
@@ -96,22 +86,10 @@ type TrainingFeedbackState = {
   stability: string
   note: string
   savedAt: string
-  modelAdvice?: {
-    nextCue: string
-    riskLevel: string
-    adjustment: string
-    source: string
-  }
 }
 
 type TrainingState = {
   lastFeedback: TrainingFeedbackState | null
-}
-
-type AiCoachState = {
-  lastQuestion: string
-  recommendation: string
-  lastUpdatedAt: string | null
 }
 
 type SupportState = {
@@ -120,30 +98,6 @@ type SupportState = {
   inviteRecipient: string
   inviteChannel: '微信' | '短信'
   lastInviteSentAt: string | null
-}
-
-type PlanLibraryState = {
-  planCount: number
-  activePlanName: string
-  trainingSplit: string
-  weeklyDays: number
-  selectedExercises: string[]
-  lastEditedAt: string | null
-}
-
-type EquipmentState = {
-  lastDetectedLabel: string | null
-  lastDetectedConfidence: number | null
-  manualSelection: string | null
-  lastUpdatedAt: string | null
-}
-
-type BodyDataState = {
-  heightCm: number
-  weightKg: number
-  bodyFatPercent: number
-  waistCm: number
-  lastUpdatedAt: string | null
 }
 
 export type PrototypeState = {
@@ -156,29 +110,12 @@ export type PrototypeState = {
   plan: GeneratedPlan
   nutrition: NutritionState
   training: TrainingState
-  aiCoach: AiCoachState
   support: SupportState
-  planLibrary: PlanLibraryState
-  equipment: EquipmentState
-  bodyData: BodyDataState
 }
 
 type OnboardingSavePayload = Pick<
   OnboardingProfileState,
-  | 'goal'
-  | 'trainingPlace'
-  | 'weeklyFrequency'
-  | 'preferredWindow'
-  | 'sessionDuration'
-  | 'equipmentPreference'
-  | 'focusPreference'
-  | 'experienceLevel'
-  | 'pushupLevel'
-  | 'squatLevel'
-  | 'plankLevel'
-  | 'recoveryLevel'
-  | 'bodyStatus'
-  | 'featurePreference'
+  'goal' | 'weeklyFrequency' | 'preferredWindow' | 'sessionDuration' | 'equipmentPreference' | 'focusPreference'
 >
 
 type PrototypeActions = {
@@ -197,14 +134,6 @@ type PrototypeActions = {
   updateNotificationSettings: (payload: NotificationSettingsState) => void
   submitSupportFeedback: (message: string) => void
   sendInvite: (payload: { recipient: string; channel: '微信' | '短信' }) => void
-  createTrainingPlan: (payload: { name: string; split: string; weeklyDays: number }) => void
-  addPlanExercise: (exercise: string) => void
-  removePlanExercise: (exercise: string) => void
-  saveEquipmentDetection: (payload: { label: string; confidence: number }) => void
-  saveManualEquipmentSelection: (label: string) => void
-  saveNutritionRecommendation: (recommendation: string) => void
-  saveAiCoachRecommendation: (payload: { question: string; recommendation: string }) => void
-  updateBodyData: (payload: Partial<BodyDataState>) => void
   resetPrototypeState: () => void
 }
 
@@ -242,38 +171,17 @@ function buildTrainingTags(input: Pick<PlanInput, 'focusPreference' | 'preferred
 function buildPlanInput(
   onboardingProfile: Pick<
     OnboardingProfileState,
-    | 'goal'
-    | 'trainingPlace'
-    | 'weeklyFrequency'
-    | 'preferredWindow'
-    | 'sessionDuration'
-    | 'equipmentPreference'
-    | 'focusPreference'
-    | 'experienceLevel'
-    | 'pushupLevel'
-    | 'squatLevel'
-    | 'plankLevel'
-    | 'recoveryLevel'
-    | 'bodyStatus'
-    | 'featurePreference'
+    'goal' | 'weeklyFrequency' | 'preferredWindow' | 'sessionDuration' | 'equipmentPreference' | 'focusPreference'
   >,
   trainingPreferences: Pick<TrainingPreferencesState, 'trainingTags'>,
 ): PlanInput {
   return {
     goal: onboardingProfile.goal,
-    trainingPlace: onboardingProfile.trainingPlace,
     weeklyFrequency: onboardingProfile.weeklyFrequency,
     preferredWindow: onboardingProfile.preferredWindow,
     sessionDuration: onboardingProfile.sessionDuration,
     equipmentPreference: onboardingProfile.equipmentPreference,
     focusPreference: onboardingProfile.focusPreference,
-    experienceLevel: onboardingProfile.experienceLevel,
-    pushupLevel: onboardingProfile.pushupLevel,
-    squatLevel: onboardingProfile.squatLevel,
-    plankLevel: onboardingProfile.plankLevel,
-    recoveryLevel: onboardingProfile.recoveryLevel,
-    bodyStatus: onboardingProfile.bodyStatus,
-    featurePreference: onboardingProfile.featurePreference,
     trainingTags:
       trainingPreferences.trainingTags.length > 0
         ? trainingPreferences.trainingTags
@@ -281,60 +189,15 @@ function buildPlanInput(
   }
 }
 
-function applyMealRecognitionState(current: PrototypeState, meal: typeof recognizedMeal | BackendMealAnalysis): PrototypeState {
-  if (current.nutrition.recognitionSaved) {
-    return current
-  }
-
-  return {
-    ...current,
-    nutrition: {
-      ...current.nutrition,
-      targets: current.nutrition.targets.map((target) => {
-        if (target.key === 'carb') {
-          return { ...target, current: Math.min(target.goal, target.current + meal.carbs) }
-        }
-        if (target.key === 'protein') {
-          return { ...target, current: Math.min(target.goal, target.current + meal.protein) }
-        }
-        if (target.key === 'fat') {
-          return { ...target, current: Math.min(target.goal, target.current + meal.fat) }
-        }
-        return target
-      }),
-      mealRecords: [
-        {
-          name: meal.name,
-          slot: meal.slot,
-          time: clockLabel(),
-          kcal: meal.calories,
-          protein: meal.protein,
-        },
-        ...current.nutrition.mealRecords,
-      ],
-      recognitionSaved: true,
-      lastSavedMealAt: nowIso(),
-    },
-  }
-}
-
 function defaultOnboardingProfile(): OnboardingProfileState {
   return {
     sections: onboardingSections.map((section) => ({ ...section, answers: [...section.answers] })),
     goal: '减脂塑形',
-    trainingPlace: '健身房固定器械区',
     weeklyFrequency: '每周 4 次',
     preferredWindow: '晚间训练',
     sessionDuration: '45 分钟',
     equipmentPreference: '固定器械优先',
     focusPreference: '背部发力',
-    experienceLevel: '规律训练 3-12 个月',
-    pushupLevel: '标准俯卧撑 6-15 个',
-    squatLevel: '徒手深蹲动作稳定',
-    plankLevel: '平板支撑 45-90 秒',
-    recoveryLevel: '训练后 1-2 天恢复',
-    bodyStatus: '无明显疼痛或伤病',
-    featurePreference: 'AI 动作纠偏',
     lastCompletedAt: null,
   }
 }
@@ -368,9 +231,9 @@ function defaultState(): PrototypeState {
     onboardingProfile,
     profileSettings: {
       personalInfo: {
-        name: '林晓雅',
+        name: '林予',
         city: '上海',
-        bio: '正在通过 AI 优化营养摄入，最近也把训练和饮食都记得清楚一点。',
+        bio: '最近在做背部塑形，喜欢把训练和饮食都记得清楚一点。',
       },
       trainingPreferences,
       privacy: {
@@ -391,15 +254,9 @@ function defaultState(): PrototypeState {
       mealRecords: mealRecords.map((record) => ({ ...record })),
       recognitionSaved: false,
       lastSavedMealAt: null,
-      aiRecommendation: null,
     },
     training: {
       lastFeedback: null,
-    },
-    aiCoach: {
-      lastQuestion: '今天高位下拉总感觉手臂先酸，应该怎么调整？',
-      recommendation: '先降低一档重量，把动作起点放在肩胛下沉。下拉时想象手肘向身体两侧口袋靠近，手只是钩住握把。',
-      lastUpdatedAt: null,
     },
     support: {
       lastFeedbackMessage: '',
@@ -407,27 +264,6 @@ function defaultState(): PrototypeState {
       inviteRecipient: '',
       inviteChannel: '微信',
       lastInviteSentAt: null,
-    },
-    planLibrary: {
-      planCount: 3,
-      activePlanName: '4周背部训练计划',
-      trainingSplit: '胸 / 背 / 腿 / 肩',
-      weeklyDays: 4,
-      selectedExercises: ['正握宽距高位下拉', '坐姿绳索划船', '腿举机'],
-      lastEditedAt: null,
-    },
-    equipment: {
-      lastDetectedLabel: null,
-      lastDetectedConfidence: null,
-      manualSelection: null,
-      lastUpdatedAt: null,
-    },
-    bodyData: {
-      heightCm: 168,
-      weightKg: 58.6,
-      bodyFatPercent: 22.4,
-      waistCm: 68,
-      lastUpdatedAt: null,
     },
   }
 }
@@ -438,8 +274,6 @@ function mergeState(base: PrototypeState, parsed: Partial<PrototypeState>): Prot
     ...base.profileSettings.trainingPreferences,
     ...parsed.profileSettings?.trainingPreferences,
   }
-  const generatedPlan = buildGeneratedPlan(buildPlanInput(mergedOnboardingProfile, mergedTrainingPreferences))
-  const mergedPlan = parsed.plan ? { ...generatedPlan, ...parsed.plan, exercises: parsed.plan.exercises ?? generatedPlan.exercises } : generatedPlan
 
   return {
     ...base,
@@ -462,7 +296,7 @@ function mergeState(base: PrototypeState, parsed: Partial<PrototypeState>): Prot
         ...parsed.profileSettings?.notificationSettings,
       },
     },
-    plan: mergedPlan,
+    plan: parsed.plan ?? buildGeneratedPlan(buildPlanInput(mergedOnboardingProfile, mergedTrainingPreferences)),
     nutrition: {
       ...base.nutrition,
       ...parsed.nutrition,
@@ -470,11 +304,7 @@ function mergeState(base: PrototypeState, parsed: Partial<PrototypeState>): Prot
       mealRecords: parsed.nutrition?.mealRecords ?? base.nutrition.mealRecords,
     },
     training: { ...base.training, ...parsed.training },
-    aiCoach: { ...base.aiCoach, ...parsed.aiCoach },
     support: { ...base.support, ...parsed.support },
-    planLibrary: { ...base.planLibrary, ...parsed.planLibrary },
-    equipment: { ...base.equipment, ...parsed.equipment },
-    bodyData: { ...base.bodyData, ...parsed.bodyData },
   }
 }
 
@@ -541,8 +371,6 @@ export function PrototypeStateProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const saveOnboardingProfile = useCallback((payload: OnboardingSavePayload) => {
-    let backendPlanInput: PlanInput | null = null
-
     setState((current) => {
       const nextOnboardingProfile = {
         ...current.onboardingProfile,
@@ -560,7 +388,6 @@ export function PrototypeStateProvider({ children }: { children: ReactNode }) {
         equipmentPreference: payload.equipmentPreference,
         trainingTags: nextTrainingTags,
       }
-      backendPlanInput = buildPlanInput(nextOnboardingProfile, nextTrainingPreferences)
 
       return {
         ...current,
@@ -569,22 +396,9 @@ export function PrototypeStateProvider({ children }: { children: ReactNode }) {
           ...current.profileSettings,
           trainingPreferences: nextTrainingPreferences,
         },
-        plan: buildGeneratedPlan(backendPlanInput),
+        plan: buildGeneratedPlan(buildPlanInput(nextOnboardingProfile, nextTrainingPreferences)),
       }
     })
-
-    window.setTimeout(() => {
-      if (!backendPlanInput) {
-        return
-      }
-
-      void aiFitApi
-        .generatePlan(backendPlanInput)
-        .then((plan) => {
-          setState((current) => ({ ...current, plan }))
-        })
-        .catch(() => undefined)
-    }, 0)
   }, [])
 
   const markNotificationRead = useCallback((id: string) => {
@@ -624,14 +438,42 @@ export function PrototypeStateProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const saveMealRecognition = useCallback(() => {
-    void aiFitApi
-      .analyzeMeal()
-      .then((meal) => {
-        setState((current) => applyMealRecognitionState(current, meal))
-      })
-      .catch(() => {
-        setState((current) => applyMealRecognitionState(current, recognizedMeal))
-      })
+    setState((current) => {
+      if (current.nutrition.recognitionSaved) {
+        return current
+      }
+
+      return {
+        ...current,
+        nutrition: {
+          ...current.nutrition,
+          targets: current.nutrition.targets.map((target) => {
+            if (target.key === 'carb') {
+              return { ...target, current: Math.min(target.goal, target.current + recognizedMeal.carbs) }
+            }
+            if (target.key === 'protein') {
+              return { ...target, current: Math.min(target.goal, target.current + recognizedMeal.protein) }
+            }
+            if (target.key === 'fat') {
+              return { ...target, current: Math.min(target.goal, target.current + recognizedMeal.fat) }
+            }
+            return target
+          }),
+          mealRecords: [
+            {
+              name: recognizedMeal.name,
+              slot: recognizedMeal.slot,
+              time: clockLabel(),
+              kcal: recognizedMeal.calories,
+              protein: recognizedMeal.protein,
+            },
+            ...current.nutrition.mealRecords,
+          ],
+          recognitionSaved: true,
+          lastSavedMealAt: nowIso(),
+        },
+      }
+    })
   }, [])
 
   const saveTrainingFeedback = useCallback((payload: { tag: string; rpe: number; stability: string; note: string }) => {
@@ -644,23 +486,6 @@ export function PrototypeStateProvider({ children }: { children: ReactNode }) {
         },
       },
     }))
-
-    void aiFitApi
-      .analyzeTrainingFeedback(payload)
-      .then((modelAdvice) => {
-        setState((current) => ({
-          ...current,
-          training: {
-            lastFeedback: current.training.lastFeedback
-              ? {
-                  ...current.training.lastFeedback,
-                  modelAdvice,
-                }
-              : current.training.lastFeedback,
-          },
-        }))
-      })
-      .catch(() => undefined)
   }, [])
 
   const updatePersonalInfo = useCallback((payload: PersonalInfoState) => {
@@ -739,103 +564,6 @@ export function PrototypeStateProvider({ children }: { children: ReactNode }) {
     }))
   }, [])
 
-  const createTrainingPlan = useCallback((payload: { name: string; split: string; weeklyDays: number }) => {
-    setState((current) => {
-      const isExistingPlan = current.planLibrary.activePlanName === payload.name
-
-      return {
-        ...current,
-        planLibrary: {
-          ...current.planLibrary,
-          planCount: isExistingPlan ? current.planLibrary.planCount : current.planLibrary.planCount + 1,
-          activePlanName: payload.name,
-          trainingSplit: payload.split,
-          weeklyDays: payload.weeklyDays,
-          lastEditedAt: nowIso(),
-        },
-      }
-    })
-  }, [])
-
-  const addPlanExercise = useCallback((exercise: string) => {
-    setState((current) => ({
-      ...current,
-      planLibrary: {
-        ...current.planLibrary,
-        selectedExercises: current.planLibrary.selectedExercises.includes(exercise)
-          ? current.planLibrary.selectedExercises
-          : [...current.planLibrary.selectedExercises, exercise],
-        lastEditedAt: nowIso(),
-      },
-    }))
-  }, [])
-
-  const removePlanExercise = useCallback((exercise: string) => {
-    setState((current) => ({
-      ...current,
-      planLibrary: {
-        ...current.planLibrary,
-        selectedExercises: current.planLibrary.selectedExercises.filter((item) => item !== exercise),
-        lastEditedAt: nowIso(),
-      },
-    }))
-  }, [])
-
-  const saveEquipmentDetection = useCallback((payload: { label: string; confidence: number }) => {
-    setState((current) => ({
-      ...current,
-      equipment: {
-        ...current.equipment,
-        lastDetectedLabel: payload.label,
-        lastDetectedConfidence: payload.confidence,
-        lastUpdatedAt: nowIso(),
-      },
-    }))
-  }, [])
-
-  const saveManualEquipmentSelection = useCallback((label: string) => {
-    setState((current) => ({
-      ...current,
-      equipment: {
-        ...current.equipment,
-        manualSelection: label,
-        lastUpdatedAt: nowIso(),
-      },
-    }))
-  }, [])
-
-  const saveNutritionRecommendation = useCallback((recommendation: string) => {
-    setState((current) => ({
-      ...current,
-      nutrition: {
-        ...current.nutrition,
-        aiRecommendation: recommendation,
-      },
-    }))
-  }, [])
-
-  const saveAiCoachRecommendation = useCallback((payload: { question: string; recommendation: string }) => {
-    setState((current) => ({
-      ...current,
-      aiCoach: {
-        lastQuestion: payload.question,
-        recommendation: payload.recommendation,
-        lastUpdatedAt: nowIso(),
-      },
-    }))
-  }, [])
-
-  const updateBodyData = useCallback((payload: Partial<BodyDataState>) => {
-    setState((current) => ({
-      ...current,
-      bodyData: {
-        ...current.bodyData,
-        ...payload,
-        lastUpdatedAt: nowIso(),
-      },
-    }))
-  }, [])
-
   const resetPrototypeState = useCallback(() => {
     setState(defaultState())
   }, [])
@@ -861,40 +589,24 @@ export function PrototypeStateProvider({ children }: { children: ReactNode }) {
         updateNotificationSettings,
         submitSupportFeedback,
         sendInvite,
-        createTrainingPlan,
-        addPlanExercise,
-        removePlanExercise,
-        saveEquipmentDetection,
-        saveManualEquipmentSelection,
-        saveNutritionRecommendation,
-        saveAiCoachRecommendation,
-        updateBodyData,
         resetPrototypeState,
       },
       unreadNotifications,
     }),
     [
-      addPlanExercise,
       clearNotifications,
-      createTrainingPlan,
       markAllNotificationsRead,
       markNotificationRead,
       requestAuthCode,
       resetPrototypeState,
-      removePlanExercise,
       restoreNotifications,
       saveAuthDraft,
-      saveEquipmentDetection,
       saveMealRecognition,
-      saveManualEquipmentSelection,
-      saveAiCoachRecommendation,
-      saveNutritionRecommendation,
       saveOnboardingProfile,
       saveTrainingFeedback,
       sendInvite,
       state,
       submitSupportFeedback,
-      updateBodyData,
       unreadNotifications,
       updateNotificationSettings,
       updatePersonalInfo,

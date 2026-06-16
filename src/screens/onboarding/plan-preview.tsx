@@ -4,6 +4,7 @@ import { routes } from '@/app/routes'
 import { GroupedSection, InsetRow, PageHeader, Screen, SectionHeader } from '@/components/app/primitives'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { todayPlan } from '@/data'
 import { usePrototypeState } from '@/prototype/state'
 
 export function PlanPreviewScreen() {
@@ -13,8 +14,8 @@ export function PlanPreviewScreen() {
     <Screen dataScreen="plan-preview">
       <PageHeader
         backTo={routes.planLoading}
-        title="AI 推荐结果"
-        description="这套计划会优先使用当前视觉模型可识别的固定器械，方便后续进行器械识别和动作纠偏。"
+        title="计划预览"
+        description="这里负责把问卷输入和训练主线接上。进入首页后，你看到的标题、教练提醒和训练总结都沿用这一份计划快照。"
         variant="secondary"
       />
 
@@ -28,13 +29,13 @@ export function PlanPreviewScreen() {
           <p className="text-[14px] leading-[21px] text-[var(--text-secondary)]">{state.plan.summary}</p>
         </div>
         <div className="grid gap-2.5">
-          {state.plan.exercises.map((exercise, index) => (
+          {todayPlan.exercises.map((exercise, index) => (
             <InsetRow
               key={exercise.name}
               title={exercise.name}
               copy={`${exercise.sets} 组 · ${exercise.reps}`}
               tone={index === 0 ? 'mint' : 'primary'}
-              trailing={<Badge variant={index === 0 ? 'mint' : 'outline'}>{exercise.machineClass}</Badge>}
+              trailing={<Badge variant={index === 0 ? 'mint' : 'outline'}>{index === 0 ? state.plan.focusPreference : exercise.focus}</Badge>}
             />
           ))}
         </div>
@@ -51,7 +52,7 @@ export function PlanPreviewScreen() {
 
       <div className="grid gap-3">
         <Button asChild className="w-full">
-          <Link to={routes.app.training}>进入训练</Link>
+          <Link to={routes.app.home}>进入首页</Link>
         </Button>
         <Button asChild className="w-full" variant="secondary">
           <Link to={routes.onboarding}>返回修改问卷</Link>

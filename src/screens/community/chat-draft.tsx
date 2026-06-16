@@ -21,7 +21,7 @@ export function ChatDraftScreen() {
       />
 
       <Badge className="w-fit" variant="mint">
-        私聊开场 · 训练邀约
+        展示页 · 不发送真实消息
       </Badge>
 
       <GroupedSection className="space-y-4 border-[var(--border-strong)] bg-[var(--surface-raised)]">
