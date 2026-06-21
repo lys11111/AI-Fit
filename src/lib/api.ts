@@ -1,7 +1,41 @@
-const defaultApiBaseUrl =
-  typeof window === 'undefined' ? 'http://localhost:8000' : `${window.location.protocol}//${window.location.hostname}:8000`
+﻿const localHostnames = new Set(['localhost', '127.0.0.1', '::1'])
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? defaultApiBaseUrl
+function defaultApiBaseUrl() {
+  if (typeof window === 'undefined') {
+    return 'http://localhost:8000'
+  }
+
+  if (window.location.hostname.endsWith('.trycloudflare.com')) {
+    return ''
+  }
+
+  return `${window.location.protocol}//${window.location.hostname}:8000`
+}
+
+function resolveApiBaseUrl() {
+  const configured = import.meta.env.VITE_API_BASE_URL?.trim()
+
+  if (configured === '' || configured === 'relative') {
+    return ''
+  }
+
+  if (typeof window !== 'undefined' && window.location.hostname.endsWith('.trycloudflare.com')) {
+    return ''
+  }
+
+  if (configured) {
+    const configuredLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(configured)
+    const pageIsLocalhost = typeof window === 'undefined' || localHostnames.has(window.location.hostname)
+
+    if (!configuredLocalhost || pageIsLocalhost) {
+      return configured
+    }
+  }
+
+  return defaultApiBaseUrl()
+}
+
+const apiBaseUrl = resolveApiBaseUrl()
 
 async function requestJson<TResponse>(path: string, init?: RequestInit): Promise<TResponse> {
   const response = await fetch(`${apiBaseUrl}${path}`, {

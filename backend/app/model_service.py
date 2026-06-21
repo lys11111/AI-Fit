@@ -52,6 +52,73 @@ EQUIPMENT_NAMES_ZH = {
     "smith machine": "史密斯机",
 }
 
+EQUIPMENT_FORM_RULES = {
+    "Chest Press machine": {
+        "camera": "推荐机位：前侧方 45°，距离 2.0-2.8 米，镜头在胸口到肩部。",
+        "framing": "头、肩、肘、腕、髋和手柄轨迹完整入框。",
+        "focus": ["耸肩推", "肘轨迹过高或过低", "弓背借力", "左右不同步"],
+    },
+    "Lat Pull Down": {
+        "camera": "推荐机位：前侧方 30-45°，距离 2.3-3.0 米，镜头在胸口。",
+        "framing": "头、肩、肘、腕、髋和下拉轨迹完整入框。",
+        "focus": ["后仰借力", "耸肩", "粘滞点"],
+    },
+    "Seated Cable Rows": {
+        "camera": "推荐机位：前侧方 45° 或正侧面 90°，距离 2.2-3.0 米。",
+        "framing": "头、肩、肘、腕、髋和拉柄水平轨迹完整入框。",
+        "focus": ["腰部甩动", "肘部外展", "耸肩"],
+    },
+    "arm curl machine": {
+        "camera": "推荐机位：正侧面 90°，距离 1.8-2.4 米，镜头在肘部到肩部。",
+        "framing": "肩、肘、腕、髋和肘垫完整入框。",
+        "focus": ["肘离开肘垫", "肩膀前顶", "后仰借力", "半程动作"],
+    },
+    "chest fly machine": {
+        "camera": "推荐机位：正面 0° 或前侧方 15-30°，距离 2.0-2.8 米。",
+        "framing": "双肩、双肘、双腕和胸前合拢路径完整入框。",
+        "focus": ["肘角变化过大", "耸肩夹胸", "过度后伸", "左右不同步"],
+    },
+    "chinning dipping": {
+        "camera": "推荐机位：辅助引体用正面 0°；辅助臂屈伸用 45-90° 侧面，距离 2.8-3.8 米。",
+        "framing": "全身、肩、肘、腕、髋、膝和辅助踏板完整入框。",
+        "focus": ["身体摆动", "耸肩", "肘外翻", "踏板反弹借力"],
+    },
+    "lateral raises machine": {
+        "camera": "推荐机位：正面 0°，距离 1.8-2.5 米，镜头在胸口到肩部。",
+        "framing": "头、双肩、双肘、双腕和髋完整入框。",
+        "focus": ["耸肩", "身体侧倾", "举得过高", "肘太弯或锁死"],
+    },
+    "leg extension": {
+        "camera": "推荐机位：正侧面 90°，距离 2.0-2.6 米，镜头对准膝关节。",
+        "framing": "髋、膝、踝和坐垫边缘完整入框。",
+        "focus": ["臀部离垫", "踢腿惯性", "行程不足", "膝轴不对"],
+    },
+    "leg press": {
+        "camera": "推荐机位：前侧方 45°，距离 2.6-3.5 米，镜头在膝到髋之间。",
+        "framing": "髋、双膝、双踝和脚踏板完整入框。",
+        "focus": ["膝内扣", "锁膝", "骨盆卷曲或腰离垫", "左右发力不均"],
+    },
+    "reg curl machine": {
+        "camera": "推荐机位：正侧面 90°，距离 2.0-2.6 米，镜头对准膝关节。",
+        "framing": "髋、膝、踝和大腿固定垫完整入框。",
+        "focus": ["髋部抬起", "甩腿借惯性", "半程动作", "膝轴不对"],
+    },
+    "seated dip machine": {
+        "camera": "推荐机位：45-90° 侧面，距离 2.0-2.6 米，镜头在肩肘之间。",
+        "framing": "肩、肘、腕、髋和手柄完整入框。",
+        "focus": ["耸肩下压", "身体弹动", "肘外翻", "手腕塌陷"],
+    },
+    "shoulder press machine": {
+        "camera": "推荐机位：前侧方 45°，距离 2.0-2.8 米，镜头在胸口到肩部。",
+        "framing": "头、肩、肘、腕、髋和顶部推举位置完整入框。",
+        "focus": ["腰椎反弓", "耸肩推举", "左右不同步", "轨迹偏移"],
+    },
+    "smith machine": {
+        "camera": "初代默认史密斯深蹲：正侧面 90°，距离 2.8-3.8 米，镜头在髋部。",
+        "framing": "全身和杠铃固定轨迹完整入框。",
+        "focus": ["膝内扣", "躯干塌陷", "深度不足或骨盆卷曲", "杠铃路径异常"],
+    },
+}
 
 class ModelService:
     def __init__(
@@ -475,11 +542,16 @@ class ModelService:
         )
 
     def analyze_form(self, equipment: str | None = None) -> FormAnalysisResponse:
-        selected_equipment = equipment or "Lat Pull Down"
+        selected_equipment = equipment if equipment in SUPPORTED_EQUIPMENT else "Lat Pull Down"
+        rule = EQUIPMENT_FORM_RULES.get(selected_equipment, EQUIPMENT_FORM_RULES["Lat Pull Down"])
         return FormAnalysisResponse(
             status="camera-ready",
             equipment=selected_equipment,
             repCount=0,
-            cues=["保持身体和器械轨迹清晰入镜", f"正在按 {selected_equipment} 的标准力线进行比对"],
+            cues=[
+                rule["camera"],
+                rule["framing"],
+                "重点纠偏：" + "、".join(rule["focus"]),
+            ],
             drawPoseLines=False,
         )

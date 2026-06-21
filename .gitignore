@@ -18,16 +18,16 @@ test-results/
 # Local model backend
 backend/.venv/
 backend/.env
+.certs/
+.yolo-config/
 models/
 *.pt
 *.pth
 *.onnx
 *.safetensors
 *.pkl
-.logs/
-.certs/
-.yolo-config/
-tools/cloudflared.exe
+*.bak-*
+tools/*.exe
 
 # Editor directories and files
 .vscode/*

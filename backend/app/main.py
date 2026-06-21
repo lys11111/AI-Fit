@@ -1,4 +1,4 @@
-from contextlib import asynccontextmanager
+﻿from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,7 +32,11 @@ app = FastAPI(title="AI-FIT Local Model API", version="0.1.0", lifespan=lifespan
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_credentials=True,
+    allow_origin_regex=(
+        r"https?://(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?"
+        r"|https://.*\.trycloudflare\.com"
+    ),
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -67,3 +71,4 @@ async def detect_equipment(image: UploadFile | None = File(default=None)):
 @app.post("/api/form/analyze")
 async def analyze_form(frame: UploadFile | None = File(default=None), equipment: str | None = Form(default=None)):
     return model_service.analyze_form(equipment=equipment)
+

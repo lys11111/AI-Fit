@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from 'node:url'
+﻿import { fileURLToPath, URL } from 'node:url'
 import fs from 'node:fs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -29,6 +29,11 @@ export default defineConfig({
             changeOrigin: true,
             secure: false,
           },
+          '/health': {
+            target: proxyBackend,
+            changeOrigin: true,
+            secure: false,
+          },
         }
       : undefined,
   },
@@ -38,3 +43,4 @@ export default defineConfig({
     },
   },
 })
+
